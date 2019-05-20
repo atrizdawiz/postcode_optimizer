@@ -3,4 +3,4 @@ dist/
 *_optimized.txt*
 *.spec
 __pycache__/
-.idea/
+.idea

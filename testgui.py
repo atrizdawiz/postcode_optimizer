@@ -1,5 +1,5 @@
 from tkinter import Frame, Tk, BOTH, Text, Menu, END, filedialog
-from listofnumbertoranges.PostCodeOptimizer import postal_dictionary_creator
+from PostCodeOptimizer import PostCodeOptimizer
 
 class Example(Frame):
 
@@ -36,7 +36,9 @@ class Example(Frame):
             self.txt.insert(END, text)
 
     def readFile(self, filename):
-        postcode_dictionary = postal_dictionary_creator(filename)
+
+        postcode_dictionary = PostCodeOptimizer.postal_dictionary_creator(filename)
+        postal_range_string = PostCodeOptimizer.postal_range_finder(postcode_dictionary)
         f = open(filename, "r")
         text = f.read()
         return text

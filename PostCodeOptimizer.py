@@ -7,11 +7,6 @@ class PostCodeOptimizer:
     input_file = ""
     output_file = ""
 
-    file = open(input_file, 'r')
-
-    lineList = file.read().rstrip().split(',')
-    lineList = [int(i) for i in lineList]
-
     postal_dictionary = ""
     candidate_range_start = 0
 
@@ -27,8 +22,7 @@ class PostCodeOptimizer:
         return dict(enumerate(lineList))
 
 
-
-    def postal_range_finder(postalDictionary):
+    def postal_range_finder(self, postalDictionary):
         print("Processing dictionary: " + str(postalDictionary))
         print("Length of dictionary: " + str(len(postalDictionary)))
         processed_list = []

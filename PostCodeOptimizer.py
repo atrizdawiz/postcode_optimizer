@@ -7,16 +7,16 @@ class PostCodeOptimizer:
     input_file = ""
     output_file = ""
 
-    postal_dictionary = ""
-    candidate_range_start = 0
-
-    def postal_dictionary_creator(self, input_filename):
+    def __init__(self, input_filename):
         self.input_filename = input_filename
         self.output_filename = input_filename.replace('.txt', '_optimized.txt')
         self.input_file = os.path.join(self.scriptdir, input_filename)
         self.output_file = os.path.join(self.scriptdir, self.output_filename)
-        self.file = open(self.input_file, 'r')
 
+    postal_dictionary = ""
+    candidate_range_start = 0
+
+    def postal_dictionary_creator(self):
         lineList = self.file.read().rstrip().split(',')
         lineList = [int(i) for i in lineList]
         return dict(enumerate(lineList))

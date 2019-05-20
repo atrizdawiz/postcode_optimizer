@@ -1,21 +1,5 @@
-from tkinter import *
-
-import tkinter
-from tkinter import tkFileDialog
-
-top = tkinter.Tk()
-# Code to add widgets will go here...
-text = Text(top)
-text.insert(INSERT, "Hello.....")
-
-m1 = PanedWindow()
-
-left = Label(m1, text="Before")
-m1.add(left)
-
-right = Label(m1, text="After")
-m1.add(right)
-top.mainloop()
+from tkinter import Frame, Tk, BOTH, Text, Menu, END, filedialog
+from listofnumbertoranges.PostCodeOptimizer import postal_dictionary_creator
 
 class Example(Frame):
 
@@ -27,7 +11,7 @@ class Example(Frame):
 
     def initUI(self):
 
-        self.parent.title("File dialog")
+        self.parent.title("Postcode optimizer")
         self.pack(fill=BOTH, expand=1)
 
         menubar = Menu(self.parent)
@@ -43,8 +27,8 @@ class Example(Frame):
 
     def onOpen(self):
 
-        ftypes = [('Python files', '*.py'), ('All files', '*')]
-        dlg = tkFileDialog.Open(self, filetypes = ftypes)
+        ftypes = [('Text files', '*.txt'), ('All files', '*')]
+        dlg = filedialog.Open(self, filetypes = ftypes)
         fl = dlg.show()
 
         if fl != '':
@@ -52,7 +36,7 @@ class Example(Frame):
             self.txt.insert(END, text)
 
     def readFile(self, filename):
-
+        postcode_dictionary = postal_dictionary_creator(filename)
         f = open(filename, "r")
         text = f.read()
         return text

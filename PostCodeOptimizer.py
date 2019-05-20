@@ -2,29 +2,25 @@ import os
 
 class PostCodeOptimizer:
     scriptdir = os.path.dirname(os.path.abspath(__file__))
-    input_filename = ""
-    output_filename = ""
     input_file = ""
     output_file = ""
 
     def __init__(self, input_filename):
-        self.input_filename = input_filename
-        self.output_filename = input_filename.replace('.txt', '_optimized.txt')
+        output_filename = input_filename.replace('.txt', '_optimized.txt')
         self.input_file = os.path.join(self.scriptdir, input_filename)
-        self.output_file = os.path.join(self.scriptdir, self.output_filename)
+        self.output_file = os.path.join(self.scriptdir, output_filename)
 
-    postal_dictionary = ""
     candidate_range_start = 0
 
     def postal_dictionary_creator(self):
-        lineList = self.file.read().rstrip().split(',')
+        file = open(self.input_file, 'r')
+        lineList = file.read().rstrip().split(',')
         lineList = [int(i) for i in lineList]
         return dict(enumerate(lineList))
 
 
     def postal_range_finder(self, postalDictionary):
-        print("Processing dictionary: " + str(postalDictionary))
-        print("Length of dictionary: " + str(len(postalDictionary)))
+        print("Processing input...")
         processed_list = []
         temp_list = []
         for key, value in postalDictionary.items():
@@ -51,6 +47,6 @@ class PostCodeOptimizer:
                         processed_list.append(str(value))
                 else:
                     processed_list.append(str(value))
-        print("Printed these objects to file: " + str(processed_list))
         output_string = ",".join([str(x) for x in processed_list])
+        print("Printed these objects to file: " + output_string)
         return output_string

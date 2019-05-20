@@ -2,7 +2,6 @@ from tkinter import Frame, Tk, BOTH, Text, Menu, END, filedialog
 from PostCodeOptimizer import PostCodeOptimizer
 
 class Example(Frame):
-    postCode = PostCodeOptimizer()
 
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -33,16 +32,15 @@ class Example(Frame):
         fl = dlg.show()
 
         if fl != '':
-            text = self.readFileAndWriteOutput(fl)
-            self.txt.insert(END, text)
+            self.readFileAndWriteOutput(fl)
 
-    def readFileAndWriteOutput(self, filename):
-        PostCodeOptimizer.input_filename = filename
-        postcode_dictionary = PostCodeOptimizer.postal_dictionary_creator(filename)
-        postal_range_string = PostCodeOptimizer.postal_range_finder(postcode_dictionary)
-        with open(PostCodeOptimizer.output_file, 'w') as f:
+
+    def readFileAndWriteOutput(self, input_filename):
+        postCodeOptimizer = PostCodeOptimizer(input_filename)
+        postal_dictionary = postCodeOptimizer.postal_dictionary_creator()
+        postal_range_string = postCodeOptimizer.postal_range_finder(postal_dictionary)
+        with open(postCodeOptimizer.output_file, 'w') as f:
             f.write(postal_range_string)
-
 
 def main():
 

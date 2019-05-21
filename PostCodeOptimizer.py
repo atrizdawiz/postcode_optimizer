@@ -1,4 +1,6 @@
+import errno
 import os
+import re
 
 class PostCodeOptimizer:
     scriptdir = os.path.dirname(os.path.abspath(__file__))
@@ -10,13 +12,34 @@ class PostCodeOptimizer:
         self.input_file = os.path.join(self.scriptdir, input_filename)
         self.output_file = os.path.join(self.scriptdir, output_filename)
 
-    candidate_range_start = 0
-
     def postal_dictionary_creator(self):
         file = open(self.input_file, 'r')
         lineList = file.read().rstrip().split(',')
+        lineList.sort()
         lineList = [int(i) for i in lineList]
+        file.close()
         return dict(enumerate(lineList))
+
+    def validate_input(self, file):
+        not_allowed = re.compile(r'[^\d| | ,]')
+        try:
+            with open(file) as f:
+                for line in f:
+                    if re.search(not_allowed, line):
+                        return False
+                    else:
+                        return True
+        except IOError as x:
+            if x.errno == errno.ENOENT:
+                print(file, '- does not exist')
+                return False
+            elif x.errno == errno.EACCES:
+                print(file, '- cannot be read')
+                return False
+            else:
+                print(file, '- some other error')
+                return False
+
 
 
     def postal_range_finder(self, postalDictionary):
@@ -47,6 +70,7 @@ class PostCodeOptimizer:
                         processed_list.append(str(value))
                 else:
                     processed_list.append(str(value))
+        processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
         print("Printed these objects to file: " + output_string)
         return output_string

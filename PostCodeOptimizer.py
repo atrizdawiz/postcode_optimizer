@@ -14,11 +14,13 @@ class PostCodeOptimizer:
 
     def postal_dictionary_creator(self):
         file = open(self.input_file, 'r')
-        lineList = file.read().rstrip().split(',')
-        lineList.sort()
-        lineList = [int(i) for i in lineList]
+        lineList = file.read()
+        lineListNoWhiteSpace = re.sub(r'\s+', '', lineList).split(',')
+        lineListNoWhiteSpace.sort()
+        print("Input read as list: " + str(lineListNoWhiteSpace))
+        lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
         file.close()
-        return dict(enumerate(lineList))
+        return dict(enumerate(lineListNoWhiteSpace))
 
     def validate_input(self, file):
         not_allowed = re.compile(r'[^\d| | ,]')
@@ -72,5 +74,6 @@ class PostCodeOptimizer:
                     processed_list.append(str(value))
         processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
+        print("Processed list as: " + str(processed_list))
         print("Printed these objects to file: " + output_string)
         return output_string

@@ -17,6 +17,7 @@ class PostCodeOptimizer:
             file = open(self.input_file_path, 'r')
             lineList = file.read()
             lineListNoWhiteSpace = re.sub(r'\s+', '', lineList).split(',')
+            lineListNoWhiteSpace = list(set(lineListNoWhiteSpace))  # removes any duplicate postcodes
             lineListNoWhiteSpace.sort()
             #print("Input read as list: " + str(lineListNoWhiteSpace))
             lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
@@ -75,7 +76,6 @@ class PostCodeOptimizer:
                         processed_list.append(str(value))
                 else:
                     processed_list.append(str(value))
-        list(set(processed_list)) #removes any duplicate postcodes
         processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
         #print("Processed list as: " + str(processed_list))

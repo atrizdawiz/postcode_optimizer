@@ -54,7 +54,7 @@ class Window(Frame):
             print("Found valid input")
             postal_dictionary = postCodeOptimizer.postal_dictionary_creator()
             postal_range_string = postCodeOptimizer.postal_range_finder(postal_dictionary)
-            with open(postCodeOptimizer.output_file, 'w') as f:
+            with open(postCodeOptimizer.output_file_path, 'w') as f:
                 f.write(postal_range_string)
                 self.showInfoText(is_input_valid)
         else:

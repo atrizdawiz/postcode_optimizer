@@ -23,4 +23,4 @@ class RangeFinderTestCase(unittest.TestCase):
        postCodeOptimizer = PostCodeOptimizer(text_input_filename)
        post_dictionary = PostCodeOptimizer.postal_dictionary_creator(postCodeOptimizer)
        result = postCodeOptimizer.validate_input(text_input_filename)
-       self.assertEqual(result, False)
+       self.assertFalse(result)

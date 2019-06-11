@@ -4,23 +4,26 @@ import re
 
 class PostCodeOptimizer:
     scriptdir = os.path.dirname(os.path.abspath(__file__))
-    input_file = ""
-    output_file = ""
+    input_file_path = ""
+    output_file_path = ""
 
     def __init__(self, input_filename):
         output_filename = input_filename.replace('.txt', '_optimized.txt')
-        self.input_file = os.path.join(self.scriptdir, input_filename)
-        self.output_file = os.path.join(self.scriptdir, output_filename)
+        self.input_file_path = os.path.join(self.scriptdir, input_filename)
+        self.output_file_path = os.path.join(self.scriptdir, output_filename)
 
     def postal_dictionary_creator(self):
-        file = open(self.input_file, 'r')
-        lineList = file.read()
-        lineListNoWhiteSpace = re.sub(r'\s+', '', lineList).split(',')
-        lineListNoWhiteSpace.sort()
-        print("Input read as list: " + str(lineListNoWhiteSpace))
-        lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
-        file.close()
-        return dict(enumerate(lineListNoWhiteSpace))
+        if(self.validate_input(self.input_file_path)):
+            file = open(self.input_file_path, 'r')
+            lineList = file.read()
+            lineListNoWhiteSpace = re.sub(r'\s+', '', lineList).split(',')
+            lineListNoWhiteSpace.sort()
+            #print("Input read as list: " + str(lineListNoWhiteSpace))
+            lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
+            file.close()
+            return dict(enumerate(lineListNoWhiteSpace))
+        else:
+            return dict(enumerate([]))
 
     def validate_input(self, file):
         not_allowed = re.compile(r'[^\d| | ,]')
@@ -45,7 +48,7 @@ class PostCodeOptimizer:
 
 
     def postal_range_finder(self, postalDictionary):
-        print("Processing input...")
+        #print("Processing input...")
         processed_list = []
         temp_list = []
         for key, value in postalDictionary.items():
@@ -72,8 +75,9 @@ class PostCodeOptimizer:
                         processed_list.append(str(value))
                 else:
                     processed_list.append(str(value))
+        list(set(processed_list)) #removes any duplicate postcodes
         processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
-        print("Processed list as: " + str(processed_list))
-        print("Printed these objects to file: " + output_string)
+        #print("Processed list as: " + str(processed_list))
+        #print("Printed these objects to file: " + output_string)
         return output_string

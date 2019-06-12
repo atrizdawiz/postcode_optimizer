@@ -6,22 +6,43 @@ class PostCodeOptimizer:
     scriptdir = os.path.dirname(os.path.abspath(__file__))
     input_file_path = ""
     output_file_path = ""
+    input_read = ""
+    written_output = ""
+    is_input_valid = ""
+    input_file_size = ""
+    output_file_size = ""
 
     def __init__(self, input_filename):
         output_filename = input_filename.replace('.txt', '_optimized.txt')
         self.input_file_path = os.path.join(self.scriptdir, input_filename)
+        self.input_file_size = self.input_file_path.__sizeof__()
         self.output_file_path = os.path.join(self.scriptdir, output_filename)
+        self.validate_input(self.input_file_path)
+        # When a postCodeOptimizer object is instantiated it will get the postal_code dictionary belonging to that input path
+        # It also sets the input_read
+        postcode_dictionary = self.postal_dictionary_creator()
+        self.input_file_size = self.input_read.__sizeof__()
+        self.postal_range_finder(postcode_dictionary) # We also get the output list, which sets the written_output variable
+
+
+    def read_file_to_list(self, file_path):
+        file = open(file_path, 'r')
+        lineList = file.read()
+        self.input_read = lineList
+        file.close()
+        return lineList
+
+    def cleanup_input_list(self, en_lista):
+        lineListNoWhiteSpace = re.sub(r'\s+', '', en_lista).split(',')
+        lineListNoWhiteSpace = list(set(lineListNoWhiteSpace))  # removes any duplicate postcodes
+        lineListNoWhiteSpace.sort()
+        return lineListNoWhiteSpace
 
     def postal_dictionary_creator(self):
-        if(self.validate_input(self.input_file_path)):
-            file = open(self.input_file_path, 'r')
-            lineList = file.read()
-            lineListNoWhiteSpace = re.sub(r'\s+', '', lineList).split(',')
-            lineListNoWhiteSpace = list(set(lineListNoWhiteSpace))  # removes any duplicate postcodes
-            lineListNoWhiteSpace.sort()
-            #print("Input read as list: " + str(lineListNoWhiteSpace))
+        if(self.is_input_valid):
+            lineList = self.read_file_to_list(self.input_file_path)
+            lineListNoWhiteSpace = self.cleanup_input_list(lineList)
             lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
-            file.close()
             return dict(enumerate(lineListNoWhiteSpace))
         else:
             return dict(enumerate([]))
@@ -32,8 +53,10 @@ class PostCodeOptimizer:
             with open(file) as f:
                 for line in f:
                     if re.search(not_allowed, line):
+                        self.is_input_valid = False
                         return False
                     else:
+                        self.is_input_valid = True
                         return True
         except IOError as x:
             if x.errno == errno.ENOENT:
@@ -47,9 +70,7 @@ class PostCodeOptimizer:
                 return False
 
 
-
     def postal_range_finder(self, postalDictionary):
-        #print("Processing input...")
         processed_list = []
         temp_list = []
         for key, value in postalDictionary.items():
@@ -78,6 +99,6 @@ class PostCodeOptimizer:
                     processed_list.append(str(value))
         processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
-        #print("Processed list as: " + str(processed_list))
-        #print("Printed these objects to file: " + output_string)
+        self.written_output = output_string
+        self.output_file_size = self.__sizeof__()
         return output_string

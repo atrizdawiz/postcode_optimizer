@@ -39,12 +39,13 @@ class PostCodeOptimizer:
         return lineListNoWhiteSpace
 
     def postal_dictionary_creator(self):
+        lineList = self.read_file_to_list(self.input_file_path)
         if(self.is_input_valid):
-            lineList = self.read_file_to_list(self.input_file_path)
             lineListNoWhiteSpace = self.cleanup_input_list(lineList)
             lineListNoWhiteSpace = [int(i) for i in lineListNoWhiteSpace]
             return dict(enumerate(lineListNoWhiteSpace))
         else:
+            #help user to identify forbidden characters
             return dict(enumerate([]))
 
     def validate_input(self, file):

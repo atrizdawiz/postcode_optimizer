@@ -11,6 +11,8 @@ class PostCodeOptimizer:
     is_input_valid = ""
     input_file_size = ""
     output_file_size = ""
+    number_of_postcodes_processed = ""
+    number_of_entries_in_output = ""
 
     def __init__(self, input_filename):
         output_filename = input_filename.replace('.txt', '_optimized.txt')
@@ -36,6 +38,7 @@ class PostCodeOptimizer:
         lineListNoWhiteSpace = re.sub(r'\s+', '', en_lista).split(',')
         lineListNoWhiteSpace = list(set(lineListNoWhiteSpace))  # removes any duplicate postcodes
         lineListNoWhiteSpace.sort()
+        self.number_of_postcodes_processed = len(lineListNoWhiteSpace)
         return lineListNoWhiteSpace
 
     def postal_dictionary_creator(self):
@@ -99,6 +102,7 @@ class PostCodeOptimizer:
                     processed_list.append(str(value))
         processed_list.sort()
         output_string = ",".join([str(x) for x in processed_list])
+        self.number_of_entries_in_output = len(processed_list)
         self.written_output = output_string
         self.output_file_size = self.__sizeof__()
         return output_string
